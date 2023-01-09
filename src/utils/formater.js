@@ -19,7 +19,7 @@ const TEMPLATES = {
   functional: `
     import React from "react";
     
-    function <%= exportComponent %>() {
+    function <%= exportComponent %>(props) {
       return <%= svg %>;
     }
     export default <%= exportComponent %>;

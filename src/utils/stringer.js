@@ -52,7 +52,7 @@ function stringify(node) {
   }
 
   const attributes = stringifyAttributes(node.attributes);
-  const buffer = `<${node.name}${attributes}>`;
+  const buffer = node.name !== 'svg' ? `<${node.name}${attributes}>` : `<${node.name}${attributes} {...props}>`;
 
   const childrensBuffer = node.children.reduce((accumulator, childrenNode) => {
     return accumulator + stringify(childrenNode);
