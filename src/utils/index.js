@@ -17,13 +17,15 @@ async function transformer(svg, config = {
   const parsed = parser.parse(cleaned.data);
   // console.log(parsed, '---parsed')
   const transformed = transform(parsed);
+
   const morphed = stringify(transformed);
+  // console.log(morphed, '---morphed')
   const formatted = format(morphed, config);
-  console.log(formatted, '---formatted')
-  // const { code } = babel.transformSync(formatted, {
-  //   plugins: ["@babel/plugin-transform-react-jsx"],
-  // });
-  // return code;
+  // console.log(formatted, '---formatted')
+  const { code } = babel.transformSync(formatted, {
+    plugins: ["@babel/plugin-transform-react-jsx"],
+  });
+  return code;
 }
 
 const files = fs.readdirSync(path.resolve(__dirname, '../svg'));
@@ -52,18 +54,34 @@ files.forEach((file) => {
   transformer(svgStr, {
     filename: newFileName
   }).then(res => {
-//     fs.writeFileSync(path.resolve(__dirname, `../../dist/${newFileName}.js`), res);
-// 	fs.writeFileSync(path.resolve(__dirname, `../../dist/${newFileName}.d.ts`), `import React from "react";
+    fs.writeFileSync(path.resolve(__dirname, `../../dist/${newFileName}.js`), res);
+	fs.writeFileSync(path.resolve(__dirname, `../../dist/${newFileName}.d.ts`), `import React from "react";
 
-// export default ${newFileName};
-// declare function ${newFileName}(props: React.SVGAttributes<SVGElement>): JSX.Element;
-// 	`);
+export default ${newFileName};
+declare function ${newFileName}(props: React.SVGAttributes<SVGElement>): JSX.Element;
+	`);
   });
 });
 
-// const l = allFiles.reduce((pre, cur) => {
-//   return pre + `export { default as ${cur} } from './${cur}';\n`;
-// }, '');
+const l = allFiles.reduce((pre, cur) => {
+  return pre + `export { default as ${cur} } from './${cur}';\n`;
+}, '');
 
-// fs.writeFileSync(path.resolve(__dirname, '../../dist/index.js'), l);
-// fs.writeFileSync(path.resolve(__dirname, '../../dist/index.d.ts'), l);
+// console.log(l)
+
+fs.writeFileSync(path.resolve(__dirname, '../../dist/index.js'), l);
+fs.writeFileSync(path.resolve(__dirname, '../../dist/index.d.ts'), l);
+
+// transformer(a).then(res => {
+//   console.log(res)
+//   const a = babel.transformSync(res, {
+//     plugins: ["@babel/plugin-transform-react-jsx"],
+//   });
+//   console.log(a.code)
+//   // const f = require("@babel/core").transform(a, {
+//   //   plugins: ["@babel/plugin-transform-react-jsx"],
+//   // });
+//   // console.log(f)
+
+//   // fs.writeFileSync('aaa.js', f)
+// })
