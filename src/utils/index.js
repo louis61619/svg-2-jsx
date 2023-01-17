@@ -72,16 +72,3 @@ const l = allFiles.reduce((pre, cur) => {
 fs.writeFileSync(path.resolve(__dirname, '../../dist/index.js'), l);
 fs.writeFileSync(path.resolve(__dirname, '../../dist/index.d.ts'), l);
 
-// transformer(a).then(res => {
-//   console.log(res)
-//   const a = babel.transformSync(res, {
-//     plugins: ["@babel/plugin-transform-react-jsx"],
-//   });
-//   console.log(a.code)
-//   // const f = require("@babel/core").transform(a, {
-//   //   plugins: ["@babel/plugin-transform-react-jsx"],
-//   // });
-//   // console.log(f)
-
-//   // fs.writeFileSync('aaa.js', f)
-// })
